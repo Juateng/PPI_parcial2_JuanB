@@ -6,6 +6,11 @@ const getLibros = asyncHandler(async (req,res) => {
     res.status(200).json(libros)
 })
 
+const getbyISBN = asyncHandler(async (req,res) => {
+    const libros = await Libro.findOne({isbn: req.params.isbn})
+    res.status(200).json(libros)
+})
+
 const crearLibros = asyncHandler(async (req,res) => {
     if(!req.body.descripcion){
         res.status(400)
@@ -17,36 +22,39 @@ const crearLibros = asyncHandler(async (req,res) => {
         descripcion : req.body.descripcion,
         titulo: req.body.titulo,
         autor: req.body.autor,
-        isbn: req.body.isbn
+        isbn: req.body.isbn,
+        genero: req.body.genero
     })
     res.status(201).json(libro)
 })
 
 const updateLibros =  asyncHandler(async (req,res) => {
     //buscamos la tarea que deseamos modificar
-    const libro = await Libro.findById(req.params.id)
+    const libro = await Libro.findOne({isbn:req.params.isbn})
     if(!Libro){
         res.status(400)
         throw new Error('El libro no existe')
     }
-    const libroUpdated = await Libro.findByIdAndUpdate(req.params.id, req.body, {new:true})
+    const libroUpdated = await Libro.findOneAndUpdate({isbn: req.params.isbn}, req.body, {new:true})
     res.status(200).json(libroUpdated)
 })
 
 const deleteLibros = asyncHandler(async (req,res) => {
     //buscamos la tarea que deseamos modificar
-    const libro = await Libro.findById(req.params.id)
+    const libro = await Libro.findOne({isbn:req.params.isbn})
     if(!Libro){
         res.status(400)
         throw new Error('El libro no existe')
     }
     await Libro.deleteOne(libro)
-    res.status(200).json({id: req.params.id})
+    res.status(200).json({isbn:req.params.isbn})
 })
+
 
 module.exports = {
     getLibros,
     crearLibros,
     updateLibros,
-    deleteLibros
+    deleteLibros,
+    getbyISBN
 }

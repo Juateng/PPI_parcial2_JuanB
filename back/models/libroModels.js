@@ -11,6 +11,10 @@ const libroschema = mongoose.Schema({
         type: String, 
         required: [true, "Por favor ingresa el titulo de un libro"]
     },
+    genero: {
+        type: String, 
+        required: [true, "Por favor ingreso el genero del libro"]
+    },
     autor: {
         type: String, 
         required: [true, "Por favor ingreso el autor del libro"]
@@ -21,7 +25,8 @@ const libroschema = mongoose.Schema({
     },
     isbn: {
         type: String, 
-        required: [true, "Por favor ingresa el Isbn del libro"]
+        required: [true, "Por favor ingresa el Isbn del libro"],
+        unique: true
     }
 },{
     timestamps: true
